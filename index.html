@@ -280,6 +280,18 @@
 
     function sh(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
+    // shuffle 选项并同步更新正确答案索引
+    function shuffleWithAnswer(q){
+      const indices=sh(q.o.map((_,i)=>i));  // 保存 shuffle 映射
+      const newOpts=indices.map(i=>q.o[i]);
+      if(q.type==='multi'){
+        const newA=q.a.map(ai=>indices.indexOf(ai));
+        return{...q,opts:newOpts,a:newA};
+      }else{
+        return{...q,opts:newOpts,a:indices.indexOf(q.a)};
+      }
+    }
+
     function getQs(mode,subj,cnt){
       let pool=mode==='full'?QB:mode==='single'?QB.filter(q=>q.sb===subj):QB.filter(q=>q.sub===subj);
       const w=[];pool.forEach(q=>{for(let i=0;i<q.f;i++)w.push(q);});
@@ -287,7 +299,7 @@
       while(sel.length<cnt&&w.length){
         const idx=Math.floor(Math.random()*w.length);
         const q=w[idx];
-        if(!used.has(q.id)){used.add(q.id);sel.push({...q,opts:sh(q.o)});}
+        if(!used.has(q.id)){used.add(q.id);sel.push(shuffleWithAnswer(q));}
         w.splice(idx,1);
       }
       return sel;
@@ -513,18 +525,17 @@
       const rm=()=>{const ni=ids.filter(id=>id!==ids[idx]);LS.set('w',ni);setIds(ni);setShow(false);if(ni.length===0){setToast('🎉 错题已全部复习完毕！');setTimeout(onBack,2000);}else if(idx>=ni.length)setIdx(ni.length-1);setToast('✅ 已移除此题');};
 
       const ltrs=['A','B','C','D','E'];
-      const q=QB.find(x=>x.id===ids[idx]);
-
+      const origQ=QB.find(x=>x.id===ids[idx]);
       if(!ids.length)return(<div style={{padding:'20px 16px'}}><div className="card" style={{textAlign:'center',padding:'40px 20px'}}><div style={{fontSize:'48px',marginBottom:'16px'}}>🎉</div><div style={{fontSize:'16px',fontWeight:'600',color:'#333'}}>错题本已清空</div><div style={{fontSize:'13px',color:'#999',marginTop:'8px'}}>继续加油！</div></div><button className="btn btn-secondary" onClick={onBack}>返回</button></div>);
-      if(!q)return null;
-
+      if(!origQ)return null;
+      const q=shuffleWithAnswer(origQ); // shuffle 选项并同步更新答案索引
       const isMultiQ=q.type==='multi';
 
       return(<div style={{padding:'16px',paddingBottom:'80px'}}>
         <div className="header"><div><div className="header-title">📝 错题本</div><div className="header-sub">第 {idx+1} / {ids.length} 题 {isMultiQ?<span className="multi-tag">多选</span>:null}</div></div><div style={{fontSize:'13px',color:'#f5222d'}}>剩余 {ids.length} 题</div></div>
         <div className="card">
           <div className="question-stem"><span className="subject-tag">{q.sub}</span>{q.st}{isMultiQ?<span className="multi-tag">多选</span>:null}</div>
-          {q.o.map((o,i)=>(
+          {q.opts.map((o,i)=>(
             <button key={i} className={'option-btn '+(show&&(isMultiQ?(Array.isArray(q.a)?q.a:[q.a]).includes(i):i===q.a)?'correct':'')} onClick={()=>!show&&setShow(true)} disabled={show}>
               <span className="opt-letter">{ltrs[i]}</span><span>{o}</span>
             </button>))}
