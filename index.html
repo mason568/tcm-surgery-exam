@@ -353,13 +353,14 @@
 
       useEffect(()=>{
         if(done)return;
-        const t=setInterval(()=>{setLeft(prev=>{if(prev<=1){clearInterval(t);finish(true);return 0;}return prev-1;});},1000);
+        const t=setInterval(()=>{setLeft(prev=>{if(prev<=1){clearInterval(t);finish(ans,true);return 0;}return prev-1;});},1000);
         return()=>clearInterval(t);
       },[done]);
 
       const isMulti=q=>q.type==='multi';
 
       const isAnsCorrect=(q,userAns)=>{
+        if(!userAns||userAns.length===0)return false;
         if(isMulti(q)){
           const correct=Array.isArray(q.a)?q.a:[];
           return correct.length===userAns.length&&correct.every(a=>userAns.includes(a));
@@ -367,14 +368,14 @@
         return userAns.length===1&&userAns[0]===q.a;
       };
 
-      // 传参版本，避免闭包陷阱
-      const finish=(auto)=>{
+      // 传参版本，避免闭包陷阱 — answersArr 直接传入，不依赖 React state 时机
+      const finish=(answersArr,auto)=>{
         if(onEndCalled.current)return;
         onEndCalled.current=true;
         setDone(true);
         setTimeout(()=>{
-          const correct=qs.reduce((n,q,i)=>n+(isAnsCorrect(q,ans[i])?1:0),0);
-          const wrongs=qs.filter((q,i)=>!isAnsCorrect(q,ans[i])).map(q=>q.id);
+          const correct=qs.reduce((n,q,i)=>n+(isAnsCorrect(q,answersArr[i])?1:0),0);
+          const wrongs=qs.filter((q,i)=>!isAnsCorrect(q,answersArr[i])).map(q=>q.id);
           onEnd({total:qs.length,correct,wrongs});
         },auto?1500:300);
       };
@@ -404,7 +405,7 @@
       };
 
       const handleNext=()=>{
-        if(idx<qs.length-1){setIdx(idx+1);setSel([]);setShow(false);setFeedMsg('');}else{finish();}
+        if(idx<qs.length-1){setIdx(idx+1);setSel([]);setShow(false);setFeedMsg('');}else{finish(ans);}
       };
 
       const fmt=s=>Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
