@@ -1,0 +1,65 @@
+{
+  "exam": {
+    "code": "325",
+    "name": "中医外科学（中级）",
+    "date": "2026-04-25",
+    "region": "上海考区"
+  },
+  "subjects": [
+    {
+      "code": "BK-001",
+      "name": "基础知识",
+      "duration": "90分钟",
+      "time": "8:30-10:00",
+      "topics": [
+        { "name": "中医基础理论", "weight": "15%" },
+        { "name": "内经", "weight": "10%" },
+        { "name": "伤寒论", "weight": "10%" },
+        { "name": "金匮要略", "weight": "10%" },
+        { "name": "温病学", "weight": "10%" },
+        { "name": "中药学", "weight": "25%" },
+        { "name": "方剂学", "weight": "20%" }
+      ]
+    },
+    {
+      "code": "BK-002",
+      "name": "相关专业知识",
+      "duration": "90分钟",
+      "time": "10:45-12:15",
+      "topics": [
+        { "name": "中医诊断学", "weight": "20%" },
+        { "name": "诊断学基础", "weight": "20%" },
+        { "name": "传染病学", "weight": "20%" },
+        { "name": "医学心理学", "weight": "15%" },
+        { "name": "医学伦理学", "weight": "10%" },
+        { "name": "卫生法规", "weight": "15%" }
+      ]
+    },
+    {
+      "code": "BK-003",
+      "name": "专业知识",
+      "duration": "90分钟",
+      "time": "14:00-15:30",
+      "topics": [
+        { "name": "中医外科学", "weight": "100%" }
+      ]
+    },
+    {
+      "code": "BK-004",
+      "name": "专业实践能力",
+      "duration": "90分钟",
+      "time": "16:15-17:45",
+      "topics": [
+        { "name": "中医外科学临床应用", "weight": "50%" },
+        { "name": "西医外科学", "weight": "35%" },
+        { "name": "麻醉学", "weight": "15%" }
+      ]
+    }
+  ],
+  "referenceBooks": [
+    { "name": "中医外科学（中级）专业技术资格考试指导用书", "publisher": "中国中医药出版社", "year": "2025/2026" },
+    { "name": "全国卫生专业技术资格考试指导——外科学", "publisher": "人民卫生出版社", "year": "2026" }
+  ],
+  "officialSource": "国家中医药管理局 / 国家卫生健康委人才交流服务中心",
+  "syllabusUrl": "https://www.21wecan.com/wsrcw/c100197/list.shtml"
+}
